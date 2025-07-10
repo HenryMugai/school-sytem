@@ -1,9 +1,7 @@
-import os
-
 DB_CONFIG = {
-    'host': os.environ.get('DB_HOST'),
-    'user': os.environ.get('DB_USER'),
-    'password': os.environ.get('DB_PASSWORD'),
-    'database': os.environ.get('DB_NAME'),
-    'port': int(os.environ.get('DB_PORT', 3306))  # fallback to 3306 if not set
+    'host': '84.16.251.118',
+    'user': 'mresearc_mugai',         # your DB username
+    'password': '0795438822',         # your DB password
+    'database': 'mresearc_school',    # your DB name
+    'port': 3306
 }
