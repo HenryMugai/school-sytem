@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header teacher-header">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="School Logo" class="school-logo">
+      <span class="institution-name">My School - Teacher</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar teacher-sidebar">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('teacher_dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('teacher_subjects') }}"><i class="bi bi-journal-bookmark-fill"></i> <span>Subjects</span></a></li>
+        <li><a href="{{ url_for('teacher_enter_results') }}"><i class="bi bi-pencil-square"></i> <span>Enter Results</span></a></li>
+        <li><a href="{{ url_for('teacher_edit_results') }}"><i class="bi bi-pen-fill"></i> <span>Edit Results</span></a></li>
+        <li><a href="{{ url_for('teacher_performance') }}"><i class="bi bi-bar-chart-fill"></i> <span>Performance</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    {% block content %}
+    <!-- Page-specific content -->
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 My School. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
+

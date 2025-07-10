@@ -1,0 +1,58 @@
+{% extends 'teacher/teacher_base.html' %}
+{% block content %}
+<div class="content-container">
+  <h2>Performance Charts</h2>
+
+  <form method="POST" class="filter-form">
+    <div class="form-group">
+      <label for="exam_id">Select Exam:</label>
+      <select name="exam_id" required>
+        <option value="">-- Choose an exam --</option>
+        {% for exam in exams %}
+          <option value="{{ exam.id }}" {% if exam.id == selected_exam_id %}selected{% endif %}>{{ exam.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit">View</button>
+  </form>
+
+  {% if charts_data %}
+    {% for chart in charts_data %}
+      <div class="performance-summary">
+        <h3>{{ chart.title }}</h3>
+        <canvas id="chart{{ loop.index }}"></canvas>
+      </div>
+    {% endfor %}
+  {% elif selected_exam_id %}
+    <p>No results available for the selected exam.</p>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const charts = {{ charts_data|tojson }};
+  charts.forEach((chart, index) => {
+    const ctx = document.getElementById('chart' + (index + 1)).getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chart.labels,
+        datasets: [{
+          label: 'Score',
+          data: chart.scores,
+          backgroundColor: '#4b0082'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

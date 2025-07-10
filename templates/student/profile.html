@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="School Logo" class="school-logo">
+      <span class="institution-name">My School</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('student_home') }}"><i class="bi bi-house-door"></i> <span>Home</span></a></li>
+        <li><a href="{{ url_for('student_profile') }}"><i class="bi bi-person-circle"></i> <span>Profile</span></a></li>
+        <li><a href="{{ url_for('student_results') }}"><i class="bi bi-clipboard-data"></i> <span>Results</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+<div class="main-content">
+  <h2>Student Profile</h2>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+          <div class="alert">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="profile-wrapper">
+    <!-- INFO GRID -->
+    <div class="profile-view">
+      <h3>Personal Information</h3>
+      <div class="profile-grid">
+        <div class="profile-item"><strong>Name:</strong> {{ student.name }}</div>
+        <div class="profile-item"><strong>Admission No:</strong> {{ student.admission_no }}</div>
+        <div class="profile-item"><strong>Class:</strong> {{ student.class_name }}</div>
+        <div class="profile-item"><strong>Email:</strong> {{ student.email }}</div>
+        <div class="profile-item"><strong>Next of Kin:</strong> {{ student.next_of_kin }}</div>
+        <div class="profile-item"><strong>Kin Contact:</strong> {{ student.next_of_kin_contact }}</div>
+      </div>
+    </div>
+
+    <!-- EDIT FORM -->
+     <div class="profile-edit">
+      <h3>Edit Information</h3>
+      <form method="POST" class="profile-form">
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input id="name" type="text" name="name" value="{{ student.name }}" required>
+        </div>
+        <div class="form-row">
+          <label for="admission_no">Admission No</label>
+          <input id="admission_no" type="text" name="admission_no" value="{{ student.admission_no }}" required>
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" value="{{ student.email }}" required>
+        </div>
+        <div class="form-row">
+          <label for="next_of_kin">Next of Kin</label>
+          <input id="next_of_kin" type="text" name="next_of_kin" value="{{ student.next_of_kin }}">
+        </div>
+        <div class="form-row">
+          <label for="next_of_kin_contact">Kin Contact</label>
+          <input id="next_of_kin_contact" type="text" name="next_of_kin_contact" value="{{ student.next_of_kin_contact }}">
+        </div>
+        <div class="form-row">
+  <label for="class_id">Select Class</label>
+  <select name="class_id" id="class_id" required>
+    <option value="">-- Select Class --</option>
+    {% for cls in classes %}
+      <option value="{{ cls.id }}" {% if cls.id == student.class_id %}selected{% endif %}>
+        {{ cls.name }} - {{ cls.stream }}
+      </option>
+    {% endfor %}
+  </select>
+</div>
+
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+  </main>
+<footer class="footer">
+  <p>© 2025 My School. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

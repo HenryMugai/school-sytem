@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="School Logo" class="school-logo">
+      <span class="institution-name">My School</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('student_home') }}"><i class="bi bi-house-door"></i> <span>Home</span></a></li>
+        <li><a href="{{ url_for('student_profile') }}"><i class="bi bi-person-circle"></i> <span>Profile</span></a></li>
+        <li><a href="{{ url_for('student_results') }}"><i class="bi bi-clipboard-data"></i> <span>Results</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+
+<main class="main-content">
+    <div class="results-page">
+      <h2>Academic Results</h2>
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% else %}
+        <div class="student-info">
+          <p><strong>Name:</strong> {{ student.name }}</p>
+          <p><strong>Class:</strong> {{ student.class_name }} - {{ student.stream }}</p>
+        </div>
+
+        {% if results %}
+          <div class="results-table-container">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Score</th>
+                  <th>Remarks</th>
+                  <th>Date Entered</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in results %}
+                  <tr>
+                    <td>{{ row.subject }}</td>
+                    <td>{{ row.score }}</td>
+                    <td>{{ row.remarks }}</td>
+                    <td>{{ row.date_entered }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p>No results available.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </main>
+<footer class="footer">
+  <p>© 2025 My School. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block content %}
+<nav class="student-nav">
+  <ul>
+    <li><a href="{{ url_for('student_home') }}">Home</a></li>
+    <li><a href="{{ url_for('student_profile') }}">Profile</a></li>
+    <li><a href="{{ url_for('student_results') }}">Results</a></li>
+    <li style="float: right;"><a href="/logout">Logout</a></li>
+  </ul>
+</nav>
+<div class="student-content">
+  {% block student_content %}{% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block content %}
+<div class="dashboard-content">
+  <h2>Welcome, Teacher</h2>
+  <p>Here are your assigned subjects and classes:</p>
+
+  {% if assignments %}
+    <div class="assignments-list">
+      {% for assignment in assignments %}
+        <div class="assignment-card">
+          <h3>{{ assignment.subject }}</h3>
+          <p><strong>Class:</strong> {{ assignment.class_name }} {{ assignment.stream }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No assignments found.</p>
+  {% endif %}
+</div>
+{% endblock %}
+

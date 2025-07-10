@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="School Logo" class="school-logo">
+      <span class="institution-name">Silver Stream</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('admin_dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('admin_staff') }}"><i class="bi bi-people"></i> <span>Staff</span></a></li>
+        <li><a href="{{ url_for('admin_classes') }}"><i class="bi bi-building"></i> <span>Classes</span></a></li>
+        <li><a href="{{ url_for('admin_exams') }}"><i class="bi bi-journal-text"></i> <span>Exams</span></a></li>
+        <li><a href="{{ url_for('admin_results') }}"><i class="bi bi-bar-chart-line"></i> <span>Results</span></a></li>
+        <li><a href="{{ url_for('admin_stats') }}"><i class="bi bi-graph-up"></i> <span>Stats</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="admin-exams">
+  <div class="top-container">
+    <!-- Add Exam Form -->
+    <div class="form-container">
+      <h3>Add New Exam</h3>
+      <form method="POST">
+        <input type="text" name="name" placeholder="Exam Name" required>
+        <input type="text" name="term" placeholder="Term" required>
+        <input type="number" name="year" placeholder="Year" required>
+        <select name="class_id" required>
+          <option value="">-- Select Class --</option>
+          {% for cls in classes %}
+            <option value="{{ cls.id }}">{{ cls.name }} {{ cls.stream }}</option>
+          {% endfor %}
+        </select>
+        <input type="date" name="exam_date" required>
+        <button type="submit">Add Exam</button>
+      </form>
+    </div>
+
+    <!-- Exam List -->
+    <div class="exam-list">
+      <h3>Exams</h3>
+      <ul>
+        {% for exam in exams %}
+        <li onclick="toggleResults('exam-{{ exam.id }}')">
+          {{ exam.name }} ({{ exam.term }} {{ exam.year }}) - {{ exam.class_name }} {{ exam.stream }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    {% for exam in exams %}
+    <div class="exam-results" id="exam-{{ exam.id }}" style="display:none;">
+      <h4>{{ exam.name }} Results - {{ exam.class_name }} {{ exam.stream }}</h4>
+      {% set results = exam_results[exam.id] %}
+      {% if results %}
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Subject</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+          <tr>
+            <td>{{ result.student_name }}</td>
+            <td>{{ result.subject }}</td>
+            <td>{{ result.score }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="no-data">No results found for this exam.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function toggleResults(id) {
+    var section = document.getElementById(id);
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 My School. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

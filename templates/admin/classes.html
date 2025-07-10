@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="School Logo" class="school-logo">
+      <span class="institution-name">My School</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('admin_dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+        <li><a href="{{ url_for('admin_staff') }}"><i class="bi bi-people"></i> <span>Staff</span></a></li>
+        <li><a href="{{ url_for('admin_classes') }}"><i class="bi bi-building"></i> <span>Classes</span></a></li>
+        <li><a href="{{ url_for('admin_exams') }}"><i class="bi bi-journal-text"></i> <span>Exams</span></a></li>
+        <li><a href="{{ url_for('admin_results') }}"><i class="bi bi-bar-chart-line"></i> <span>Results</span></a></li>
+        <li><a href="{{ url_for('admin_stats') }}"><i class="bi bi-graph-up"></i> <span>Stats</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+ <div class="admin-classes">
+  <div class="top-container">
+    <!-- Add New Class Form -->
+    <div class="form-container">
+      <h3>Add New Class</h3>
+      <form method="POST">
+        <input type="text" name="name" placeholder="Class Name" required>
+        <input type="text" name="stream" placeholder="Stream" required>
+        <label>Assign Class Teacher</label>
+        <select name="class_teacher_id">
+          <option value="">-- Select Teacher --</option>
+          {% for teacher in teachers %}
+            <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Add Class</button>
+      </form>
+    </div>
+
+    <!-- Class List -->
+    <div class="list-container">
+      <h3>Existing Classes</h3>
+      <ul>
+        {% for cls in classes %}
+       <li>
+  <div style="flex: 1;">
+    <strong>{{ cls.name }} - {{ cls.stream }}</strong><br>
+    <small>Teacher: {{ cls.teacher_name if cls.teacher_name else 'Unassigned' }}</small>
+    <form method="POST" action="{{ url_for('update_class_teacher', class_id=cls.id) }}">
+      <select name="class_teacher_id" style="width: 100%; padding: 6px;">
+        <option value="">-- Assign/Change Teacher --</option>
+        {% for teacher in teachers %}
+          <option value="{{ teacher.id }}" {% if cls.class_teacher_id == teacher.id %}selected{% endif %}>{{ teacher.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" style="margin-top: 6px; padding: 6px 12px; background-color: #007bff; color: #fff; border: none; border-radius: 5px;">Update</button>
+    </form>
+  </div>
+  <form method="POST" action="{{ url_for('delete_class', id=cls.id) }}" onsubmit="return confirm('Delete this class?');">
+    <button type="submit" class="delete-btn">Delete</button>
+  </form>
+</li>
+
+        {% endfor %}
+      </ul>
+    </div>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  </div>
+
+  <!-- Class Cards (Toggleable Student List) -->
+  <div class="class-cards">
+    {% for cls in classes %}
+    <div class="class-card" onclick="toggleStudents('students-{{ cls.id }}')">
+      <h4>{{ cls.name }} - {{ cls.stream }}</h4>
+      <p><small><strong>Teacher:</strong> {{ cls.teacher_name if cls.teacher_name else 'Unassigned' }}</small></p>
+      <ul id="students-{{ cls.id }}" class="student-list" style="display: none;">
+        {% if student_map[cls.id] %}
+          {% for s in student_map[cls.id] %}
+          <li>
+            <strong>{{ s.name }}</strong><br>
+            Adm No: {{ s.admission_no }}<br>
+            Next of Kin: {{ s.next_of_kin }}<br>
+            Contact: {{ s.next_of_kin_contact }}
+          </li>
+          {% endfor %}
+        {% else %}
+          <li class="no-students">No students in this class.</li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function toggleStudents(id) {
+    const element = document.getElementById(id);
+    if (element.style.display === "none") {
+      element.style.display = "block";
+    } else {
+      element.style.display = "none";
+    }
+  }
+</script>
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 My School. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

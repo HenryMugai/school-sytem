@@ -1,0 +1,71 @@
+{% extends "teacher/teacher_base.html" %}
+{% block content %}
+<div class="enter-results-section">
+  <h2>Enter Student Results</h2>
+
+  <form method="POST">
+    <label>Subject:</label>
+    <select name="subject_id" required>
+      <option value="">-- Select Subject --</option>
+      {% for assign in assignments %}
+        <option value="{{ assign.subject_id }}" {% if assign.subject_id == selected_subject_id|int %}selected{% endif %}>
+          {{ assign.subject_name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label>Class:</label>
+    <select name="class_id" required>
+      <option value="">-- Select Class --</option>
+      {% for assign in assignments %}
+        <option value="{{ assign.class_id }}" {% if assign.class_id == selected_class_id|int %}selected{% endif %}>
+          {{ assign.class_name }} {{ assign.stream }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label>Exam:</label>
+    <select name="exam_id" required>
+      <option value="">-- Select Exam --</option>
+      {% for exam in exams %}
+        <option value="{{ exam.id }}" {% if exam.id == selected_exam_id|int %}selected{% endif %}>
+          {{ exam.name }} ({{ exam.term }} - {{ exam.year }})
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Load Students</button>
+  </form>
+
+  {% if students %}
+  <form method="POST">
+    <!-- Keep hidden selected values -->
+    <input type="hidden" name="subject_id" value="{{ selected_subject_id }}">
+    <input type="hidden" name="class_id" value="{{ selected_class_id }}">
+    <input type="hidden" name="exam_id" value="{{ selected_exam_id }}">
+    <input type="hidden" name="scores" value="1">
+
+    <h3>Enter Scores</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Score</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ student.name }}</td>
+          <td><input type="number" name="score_{{ student.id }}" required></td>
+          <td><input type="text" name="remarks_{{ student.id }}"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit">Submit Results</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | School System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body.
+   <div class="form-container">
+    <h2>Create an Account</h2>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <select name="role" id="role" required>
+        <option value="">Select Role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <!-- Teacher Fields -->
+      <div id="teacher-fields" style="display: none;">
+        <input type="text" name="teacher_name" placeholder="Full Name (Teacher)">
+        <input type="text" name="staff_no" placeholder="Staff Number">
+        <input type="text" name="contact" placeholder="Contact">
+      </div>
+
+      <!-- Student Fields -->
+      <div id="student-fields" style="display: none;">
+        <input type="text" name="student_name" placeholder="Full Name (Student)">
+        <input type="text" name="admission_no" placeholder="Admission Number">
+        <label>Select Class</label>
+        <select name="class_id">
+          <option value="">-- Choose Class --</option>
+          {% for cls in class_list %}
+            <option value="{{ cls.id }}">{{ cls.name }} - {{ cls.stream }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="next_of_kin" placeholder="Next of Kin">
+        <input type="text" name="next_of_kin_contact" placeholder="Kin Contact">
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p style="text-align:center;">Already have an account?</p>
+    <p style="text-align:center;"><a href="{{ url_for('login') }}" class="btn-link">Login</a></p>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById('role');
+    const teacherFields = document.getElementById('teacher-fields');
+    const studentFields = document.getElementById('student-fields');
+
+    roleSelect.addEventListener('change', function () {
+      const role = this.value;
+      teacherFields.style.display = role === 'teacher' ? 'block' : 'none';
+      studentFields.style.display = role === 'student' ? 'block' : 'none';
+    });
+  </script>
+
+</body>
+</html>
+
