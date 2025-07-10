@@ -1,7 +1,9 @@
+import os
+
 DB_CONFIG = {
-    'host': '127.0.0.1',
-    'port': 3306,
-    'user': 'root',
-    'password': '0795438822',
-    'database': 'school'
+    'host': os.environ.get('DB_HOST'),
+    'user': os.environ.get('DB_USER'),
+    'password': os.environ.get('DB_PASSWORD'),
+    'database': os.environ.get('DB_NAME'),
+    'port': int(os.environ.get('DB_PORT', 3306))  # fallback to 3306 if not set
 }
